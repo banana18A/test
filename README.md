@@ -1,3 +1,4 @@
+```
 $root = "C:\work"   # 親フォルダに変更
 
 Get-ChildItem $root -Directory | ForEach-Object {
@@ -10,4 +11,5 @@ Get-ChildItem $root -Directory | ForEach-Object {
     Count  = $count
   }
 } | Format-Table -AutoSize
+```
 
