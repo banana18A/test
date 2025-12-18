@@ -1,15 +1,19 @@
 ```
-$root = "C:\work"   # 親フォルダに変更
+$root = "C:\work"   # ←親フォルダに変更
 
-Get-ChildItem $root -Directory | ForEach-Object {
+$rows = Get-ChildItem $root -Directory | ForEach-Object {
   $count = Get-ChildItem $_.FullName -File -Filter *.java -Recurse -ErrorAction SilentlyContinue |
-           Where-Object { $_.Name -notlike "*Test*" } |
+           Where-Object { $_.Name -like "*Test*" } |
            Measure-Object | Select-Object -ExpandProperty Count
 
   [pscustomobject]@{
     Folder = $_.Name
     Count  = $count
   }
-} | Format-Table -AutoSize
+}
+
+$rows | Format-Table -AutoSize
+"TOTAL`t$($rows | Measure-Object Count -Sum | Select-Object -ExpandProperty Sum)"
+
 ```
 
