@@ -1,7 +1,13 @@
-$root = "C:\work"          # 検索ルート
-$pattern = "ERROR"         # 探したい文字列（必要なら変更）
+$root = "C:\work"   # 親フォルダに変更
 
-Get-ChildItem $root -Recurse -File -Filter *.java |
-  Where-Object { $_.Name -notlike "*Test*" } |
-  Select-String -Pattern $pattern -SimpleMatch -List |
-  Select-Object -ExpandProperty Path
+Get-ChildItem $root -Directory | ForEach-Object {
+  $count = Get-ChildItem $_.FullName -File -Filter *.java -Recurse -ErrorAction SilentlyContinue |
+           Where-Object { $_.Name -notlike "*Test*" } |
+           Measure-Object | Select-Object -ExpandProperty Count
+
+  [pscustomobject]@{
+    Folder = $_.Name
+    Count  = $count
+  }
+} | Format-Table -AutoSize
+
